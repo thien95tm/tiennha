@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# Cho phép upload ảnh công tơ tới 10MB
+php_value upload_max_filesize 10M
+php_value post_max_size 12M
+
+
+# Forward Authorization header sang PHP (Apache hay nuốt header này)
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+<FilesMatch "\.env$">
+  Require all denied
+</FilesMatch>

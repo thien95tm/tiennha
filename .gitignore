@@ -1,0 +1,39 @@
+# Secrets
+api/.env
+web/.env
+web/.env.local
+web/.env.development.local
+web/.env.production.local
+
+# Dependencies
+**/node_modules/
+
+# Build output
+web/dist/
+web/.vite/
+
+# Logs
+*.log
+api/logs/
+**/error_log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Local PHP server log
+/tmp/php-api.log
+
+# Temp helper
+/tmp/askpass.sh
+
+# Standalone db.php pasted by user (local only, has plain creds)
+/db.php
+
+# Test images stay in repo (helpful as samples) - comment to exclude
+# test/
