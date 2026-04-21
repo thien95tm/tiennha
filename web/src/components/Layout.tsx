@@ -20,11 +20,11 @@ export default function Layout() {
             </Link>
             <nav className="flex gap-1">
               <NavLink to="/" end className={linkCls}>Tổng quan</NavLink>
-              <NavLink to="/bills" className={linkCls}>Hoá đơn</NavLink>
-              <NavLink to="/bills/new/bulk" className={linkCls}>📷 Chụp 5 phòng</NavLink>
+              <NavLink to="/bills" end className={linkCls}>Hoá đơn</NavLink>
+              <NavLink to="/bills/new/bulk" end className={linkCls}>📷 Chụp 5 phòng</NavLink>
               <NavLink to="/bills/new" end className={linkCls}>Tạo từng phòng</NavLink>
-              <NavLink to="/tenants" className={linkCls}>Người thuê</NavLink>
-              <NavLink to="/pricing" className={linkCls}>Bảng giá</NavLink>
+              <NavLink to="/tenants" end className={linkCls}>Người thuê</NavLink>
+              <NavLink to="/pricing" end className={linkCls}>Bảng giá</NavLink>
             </nav>
           </div>
           <div className="flex items-center gap-3 text-sm">
