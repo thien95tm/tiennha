@@ -40,11 +40,11 @@ export default function Dashboard() {
             <tr>
               <th className="px-3 py-3">Phòng</th>
               <th className="px-3 py-3">Người thuê</th>
-              <th className="px-3 py-3 text-right">Tiền phòng</th>
+              <th className="px-3 py-3 text-right">Tổng tháng gần nhất</th>
+              <th className="hidden md:table-cell px-3 py-3 text-right">Tiền phòng</th>
               <th className="hidden md:table-cell px-3 py-3 text-right">Nước + rác</th>
               <th className="hidden md:table-cell px-3 py-3 text-right">Điện/số</th>
               <th className="hidden lg:table-cell px-3 py-3">Bill gần nhất</th>
-              <th className="hidden lg:table-cell px-3 py-3 text-right">Tổng tháng đó</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -63,7 +63,10 @@ export default function Dashboard() {
                       <span className="text-gray-400 italic">-</span>
                     )}
                   </td>
-                  <td className="px-3 py-3 text-right">{vnd(r.rent_amount)}</td>
+                  <td className="px-3 py-3 text-right font-semibold text-indigo-700">
+                    {b ? vnd(b.total) : <span className="text-gray-400 font-normal">-</span>}
+                  </td>
+                  <td className="hidden md:table-cell px-3 py-3 text-right">{vnd(r.rent_amount)}</td>
                   <td className="hidden md:table-cell px-3 py-3 text-right">{vnd(r.water_fee)}</td>
                   <td className="hidden md:table-cell px-3 py-3 text-right">{vnd(r.electric_unit_price)}</td>
                   <td className="hidden lg:table-cell px-3 py-3">
@@ -73,9 +76,6 @@ export default function Dashboard() {
                         <div className="text-xs text-gray-500">Điện {b.electric_diff} số</div>
                       </div>
                     ) : <span className="text-gray-400">-</span>}
-                  </td>
-                  <td className="hidden lg:table-cell px-3 py-3 text-right font-semibold text-indigo-700">
-                    {b ? vnd(b.total) : '-'}
                   </td>
                 </tr>
               );
