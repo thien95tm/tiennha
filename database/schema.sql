@@ -28,7 +28,7 @@ CREATE TABLE admin_users (
   username      VARCHAR(50)  NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------------------
 -- 2. Phòng (cố định 5 phòng, có thể bật/tắt)
@@ -41,7 +41,7 @@ CREATE TABLE rooms (
   is_active   TINYINT(1)   NOT NULL DEFAULT 1,
   sort_order  INT          NOT NULL DEFAULT 0,
   created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------------------
 -- 3. Người thuê
@@ -52,7 +52,7 @@ CREATE TABLE tenants (
   phone       VARCHAR(20)  NULL,
   note        TEXT         NULL,
   created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------------------
 -- 4. Lịch sử ai thuê phòng nào
@@ -70,7 +70,7 @@ CREATE TABLE room_assignments (
   CONSTRAINT fk_assign_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id),
   INDEX idx_assign_room   (room_id, start_date),
   INDEX idx_assign_active (room_id, end_date)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------------------
 -- 5. Bảng giá theo thời gian
@@ -87,7 +87,7 @@ CREATE TABLE room_pricing (
   created_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_pricing_room FOREIGN KEY (room_id) REFERENCES rooms(id),
   INDEX idx_pricing_room_date (room_id, effective_from)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------------------
 -- 6. Hoá đơn từng tháng từng phòng
@@ -111,7 +111,7 @@ CREATE TABLE monthly_bills (
   CONSTRAINT fk_bill_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id),
   UNIQUE KEY uq_bill_room_month (room_id, month),
   INDEX idx_bill_month (month)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------------------
 -- 7. Phí phát sinh (0..n cho mỗi bill)
@@ -124,4 +124,4 @@ CREATE TABLE extra_fees (
   created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_extra_bill FOREIGN KEY (bill_id) REFERENCES monthly_bills(id) ON DELETE CASCADE,
   INDEX idx_extra_bill (bill_id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
