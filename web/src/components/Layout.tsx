@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
 export default function Layout() {
@@ -15,7 +15,9 @@ export default function Layout() {
       <header className="bg-white border-b shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <h1 className="font-semibold text-lg text-indigo-600">🏠 Tiền thuê nhà</h1>
+            <Link to="/" className="font-semibold text-lg text-indigo-600 hover:text-indigo-700">
+              🏠 Tiền thuê nhà
+            </Link>
             <nav className="flex gap-1">
               <NavLink to="/" end className={linkCls}>Tổng quan</NavLink>
               <NavLink to="/bills" className={linkCls}>Hoá đơn</NavLink>
