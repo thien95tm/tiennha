@@ -8,6 +8,7 @@ import BillForm from './pages/BillForm';
 import BillBulk from './pages/BillBulk';
 import Tenants from './pages/Tenants';
 import Pricing from './pages/Pricing';
+import BirthdayWife from './pages/BirthdayWife';
 
 function Protected({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -22,6 +23,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/sinh-nhat" element={<BirthdayWife />} />
           <Route element={<Protected><Layout /></Protected>}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/bills" element={<Bills />} />

@@ -24,7 +24,8 @@ api.interceptors.response.use(
   (err) => {
     if (err.response?.status === 401) {
       tokenStorage.clear();
-      if (location.pathname !== '/login') location.href = '/login';
+      const publicPaths = ['/login', '/sinh-nhat'];
+      if (!publicPaths.includes(location.pathname)) location.href = '/login';
     }
     return Promise.reject(err);
   }
