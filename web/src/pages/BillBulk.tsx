@@ -24,7 +24,8 @@ export default function BillBulk() {
   const [phase, setPhase] = useState<'pick' | 'processing' | 'review' | 'saving'>('pick');
   const [err, setErr] = useState('');
   const [dragOver, setDragOver] = useState(false);
-  const fileInput = useRef<HTMLInputElement>(null);
+  const cameraInput = useRef<HTMLInputElement>(null);
+  const galleryInput = useRef<HTMLInputElement>(null);
 
   // Phát hiện conflict: 2+ ảnh gán cùng phòng
   const conflicts = useMemo(() => {
@@ -117,7 +118,7 @@ export default function BillBulk() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Tạo hoá đơn hàng loạt (chụp 5 công tơ)</h2>
+        <h2 className="text-xl font-semibold">Tạo hoá đơn hàng loạt (chụp / tải ảnh 5 công tơ)</h2>
         <button onClick={() => nav('/bills/new')} className="text-sm text-gray-600 hover:underline">
           ← Chuyển sang tạo từng phòng
         </button>
@@ -139,15 +140,29 @@ export default function BillBulk() {
             onDrop={onDrop}
             onDragOver={e => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
-            onClick={() => fileInput.current?.click()}
+            onClick={() => galleryInput.current?.click()}
             className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition ${
               dragOver ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300 bg-white hover:border-gray-400'
             }`}
           >
             <div className="text-4xl mb-2">📷</div>
             <div className="text-gray-700 font-medium">Kéo thả ảnh công tơ vào đây</div>
-            <div className="text-sm text-gray-500 mt-1">hoặc click để chọn nhiều ảnh</div>
-            <input ref={fileInput} type="file" accept="image/*" multiple capture="environment"
+            <div className="text-sm text-gray-500 mt-1">hoặc chọn ảnh có sẵn / chụp mới</div>
+            <div className="mt-4 flex justify-center gap-3">
+              <button type="button"
+                onClick={e => { e.stopPropagation(); galleryInput.current?.click(); }}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-sm">
+                🖼️ Chọn ảnh từ máy
+              </button>
+              <button type="button"
+                onClick={e => { e.stopPropagation(); cameraInput.current?.click(); }}
+                className="border border-gray-300 bg-white px-4 py-2 rounded-md hover:bg-gray-50 text-sm">
+                📷 Chụp ảnh
+              </button>
+            </div>
+            <input ref={galleryInput} type="file" accept="image/*" multiple
+              className="hidden" onChange={onChangeFile} />
+            <input ref={cameraInput} type="file" accept="image/*" capture="environment"
               className="hidden" onChange={onChangeFile} />
           </div>
 

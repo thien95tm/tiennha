@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createBill, listRooms, ocrMeter, suggestBill } from '../api/endpoints';
 import type { Room } from '../api/types';
@@ -25,7 +25,8 @@ export default function BillForm() {
   const [ocrLoading, setOcrLoading] = useState(false);
   const [ocrPreview, setOcrPreview] = useState<string | null>(null);
   const [ocrConfidence, setOcrConfidence] = useState<string | null>(null);
-  const fileInput = useRef<HTMLInputElement>(null);
+  const cameraInput = useRef<HTMLInputElement>(null);
+  const galleryInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     listRooms().then(rs => {
@@ -69,6 +70,12 @@ export default function BillForm() {
     } catch (e: any) {
       setErr(e.response?.data?.error ?? 'Lỗi OCR');
     } finally { setOcrLoading(false); }
+  };
+
+  const onPickFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) handleOcr(f);
+    e.target.value = ''; // cho phép chọn lại cùng 1 file
   };
 
   const submit = async () => {
@@ -120,18 +127,25 @@ export default function BillForm() {
                 className="mt-1 w-full px-3 py-2 border rounded-md" />
             </label>
             <label>
-              <span className="text-sm text-gray-700 flex justify-between">
+              <span className="text-sm text-gray-700 flex justify-between items-center gap-2">
                 <span>Số điện mới</span>
-                <button type="button" onClick={() => fileInput.current?.click()}
-                  className="text-indigo-600 hover:text-indigo-800 text-xs">
-                  📷 Chụp công tơ
-                </button>
+                <span className="flex gap-2">
+                  <button type="button" onClick={() => cameraInput.current?.click()}
+                    className="text-indigo-600 hover:text-indigo-800 text-xs">
+                    📷 Chụp
+                  </button>
+                  <button type="button" onClick={() => galleryInput.current?.click()}
+                    className="text-indigo-600 hover:text-indigo-800 text-xs">
+                    🖼️ Tải ảnh
+                  </button>
+                </span>
               </span>
               <input type="number" value={electricCurrent} onChange={e => setElectricCurrent(+e.target.value)}
                 className="mt-1 w-full px-3 py-2 border rounded-md font-semibold" />
-              <input ref={fileInput} type="file" accept="image/*" capture="environment"
-                className="hidden"
-                onChange={e => e.target.files?.[0] && handleOcr(e.target.files[0])} />
+              <input ref={cameraInput} type="file" accept="image/*" capture="environment"
+                className="hidden" onChange={onPickFile} />
+              <input ref={galleryInput} type="file" accept="image/*"
+                className="hidden" onChange={onPickFile} />
             </label>
           </div>
 
