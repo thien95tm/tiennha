@@ -54,7 +54,7 @@ export default function Pricing() {
           <input type="number" placeholder="Tiền phòng" value={form.rent_amount}
             onChange={e => setForm({ ...form, rent_amount: +e.target.value })}
             className="px-3 py-2 border rounded" />
-          <input type="number" placeholder="Nước+rác" value={form.water_fee}
+          <input type="number" placeholder="Nước+rác+internet" value={form.water_fee}
             onChange={e => setForm({ ...form, water_fee: +e.target.value })}
             className="px-3 py-2 border rounded" />
           <input type="number" placeholder="Đơn giá điện" value={form.electric_unit_price}

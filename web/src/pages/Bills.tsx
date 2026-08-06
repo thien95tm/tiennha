@@ -62,7 +62,7 @@ export default function Bills() {
                 <th className="px-4 py-3">Người thuê</th>
                 <th className="px-4 py-3 text-right">Điện cũ → mới</th>
                 <th className="px-4 py-3 text-right">Tiền điện</th>
-                <th className="px-4 py-3 text-right">Nước+rác</th>
+                <th className="px-4 py-3 text-right">Nước+rác+internet</th>
                 <th className="px-4 py-3 text-right">Tiền phòng</th>
                 <th className="px-4 py-3 text-right">Phát sinh</th>
                 <th className="px-4 py-3 text-right">Tổng</th>

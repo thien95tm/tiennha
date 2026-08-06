@@ -185,7 +185,7 @@ export default function BillForm() {
 
           <div className="grid grid-cols-2 gap-3 mb-3">
             <label>
-              <span className="text-sm text-gray-700">Nước + rác</span>
+              <span className="text-sm text-gray-700">Nước + rác + internet</span>
               <input type="number" value={waterFee} onChange={e => setWaterFee(+e.target.value)}
                 className="mt-1 w-full px-3 py-2 border rounded-md" />
             </label>
@@ -227,7 +227,7 @@ export default function BillForm() {
               <span>{vnd(electricAmount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Nước + rác</span><span>{vnd(waterFee)}</span>
+              <span className="text-gray-600">Nước + rác + internet</span><span>{vnd(waterFee)}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Tiền phòng</span><span>{vnd(rentAmount)}</span>

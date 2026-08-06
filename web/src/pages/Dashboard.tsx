@@ -42,7 +42,7 @@ export default function Dashboard() {
               <th className="px-3 py-3">Người thuê</th>
               <th className="px-3 py-3 text-right">Tổng tháng gần nhất</th>
               <th className="hidden md:table-cell px-3 py-3 text-right">Tiền phòng</th>
-              <th className="hidden md:table-cell px-3 py-3 text-right">Nước + rác</th>
+              <th className="hidden md:table-cell px-3 py-3 text-right">Nước + rác + internet</th>
               <th className="hidden md:table-cell px-3 py-3 text-right">Điện/số</th>
               <th className="hidden lg:table-cell px-3 py-3">Bill gần nhất</th>
             </tr>
