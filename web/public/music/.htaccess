@@ -1,0 +1,21 @@
+# Nhạc cho game Audition Mini.
+# Mục đích: không cho site khác nhúng thẳng file, không cho máy tìm kiếm
+# đánh chỉ mục. Thư mục con nên RewriteEngine ở đây ghi đè rule của docroot.
+
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow, noarchive"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Chặn khi có Referer nhưng KHÔNG phải từ chính site này (đúng nghĩa hotlink).
+  # Referer rỗng vẫn cho qua để không chặn nhầm trình duyệt đặt no-referrer.
+  RewriteCond %{HTTP_REFERER} !^$
+  RewriteCond %{HTTP_REFERER} !^https?://([^/]+\.)?tiennha\.jsonsave\.com/ [NC]
+  RewriteCond %{HTTP_REFERER} !^https?://(localhost|127\.0\.0\.1|tienthuenha\.local)(:[0-9]+)?/ [NC]
+  RewriteRule \.(mp3|m4a|wav|ogg)$ - [F,L]
+</IfModule>
+
+# Không liệt kê danh sách file trong thư mục
+Options -Indexes
