@@ -156,6 +156,9 @@
     background: linear-gradient(180deg, #ffd75e 0%, #ff9a22 45%, #e93a0c 100%);
     box-shadow: inset 0 -4px 8px rgba(120,20,0,.45);
   }
+  /* đã chốt nhịp: làm nhạt đi để biết lượt này xong rồi */
+  #barwrap.judged #fill { filter: grayscale(.65) brightness(.6) }
+  #barwrap.judged #marker { opacity: .35 !important }
   .zone { position: absolute; top: 0; bottom: 0 }
   #z-bad     { background: rgba(70,38,14,.10) }
   #z-cool    { background: rgba(70,38,14,.13) }
@@ -166,8 +169,8 @@
   }
   #target { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(70,38,14,.55) }
   #marker {
-    position: absolute; top: 50%; left: 0; width: 22px; height: 22px;
-    margin: -11px 0 0 -11px; border-radius: 50%; opacity: 0;
+    position: absolute; top: 50%; left: 0; width: 15px; height: 15px;
+    margin: -7.5px 0 0 -7.5px; border-radius: 50%; opacity: 0;
     background: radial-gradient(circle at 42% 30%, #fff 0%, #ff9c9c 28%, #e2201b 62%, #8d0b0b 100%);
     border: 3px solid #fff;
     box-shadow: 0 2px 7px rgba(0,0,0,.65), 0 0 14px rgba(255,80,60,.55);
@@ -296,6 +299,27 @@
   .dot { width: 6px; height: 6px; border-radius: 99px; background: #382a60 }
   .dot.f { background: var(--pink) }
 
+  /* chọn tốc độ */
+  #speedrow {
+    width: 100%; max-width: 380px; flex: 0 0 auto;
+    display: flex; align-items: center; gap: 9px;
+  }
+  #speedrow .slabel {
+    font-size: 10px; letter-spacing: 1.4px; color: var(--muted);
+    text-transform: uppercase; white-space: nowrap;
+  }
+  #speeds { display: flex; gap: 6px; flex: 1 }
+  #speeds button {
+    flex: 1; background: var(--panel); border: 1px solid var(--line); color: var(--text);
+    border-radius: 10px; padding: 7px 4px; cursor: pointer;
+    font-family: inherit; font-size: 12px; font-weight: 700; transition: .15s;
+  }
+  #speeds button small { display: block; font-weight: 400; font-size: 9.5px; color: var(--muted); margin-top: 1px }
+  #speeds button.on {
+    border-color: var(--gold); background: rgba(255,210,63,.14);
+    box-shadow: 0 0 14px rgba(255,210,63,.2);
+  }
+
   #customPanel {
     width: 100%; max-width: 380px; display: none; flex-direction: column; gap: 8px;
     background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px;
@@ -393,7 +417,7 @@
     </div>
 
     <div id="woodpanel"><div id="arrowbox"></div></div>
-    <div id="barlabel">Gõ hết mũi tên rồi nhấn SPACE khi núm đỏ vào vạch trắng</div>
+    <div id="barlabel">Gõ hết mũi tên TRƯỚC khi núm đỏ tới vùng vàng, rồi nhấn SPACE</div>
   </div>
 
   <div id="pad">
@@ -410,6 +434,11 @@
     <div class="sub">Chọn nhạc rồi bắt đầu. BPM càng cao, thanh nhịp chạy càng nhanh và vùng Perfect càng hẹp.</div>
 
     <div id="tracklist"></div>
+
+    <div id="speedrow">
+      <span class="slabel">Tốc độ</span>
+      <div id="speeds"></div>
+    </div>
 
     <div id="customPanel">
       <label>File nhạc của bạn (mp3 / m4a / wav)</label>
@@ -564,11 +593,21 @@ const CUSTOM = {
       thời gian thực và thanh nhịp cũng chạy nhanh hơn.
    ============================================================ */
 
-const BEATS_PER_ROUND = 8;    // 1 lượt = 8 nhịp
-const SWEEP_BEATS     = 2.5;  // vạch chạy hết thanh trong 2.5 nhịp
-const TARGET_FRAC     = 0.8;  // điểm chốt nằm ở 80% chiều dài thanh
+// Con lăn chạy suốt cả lượt, chạm mép phải đúng lúc lượt sau bắt đầu rồi
+// nhảy về 0 ngay — không còn khoảng chết để gõ thong thả như trước.
+// Mũi tên cũng hiện đúng lúc con lăn xuất phát.
+const SPEEDS = [
+  { id: "s8", label: "Thường",   beats: 8, note: "8 nhịp mỗi lượt" },
+  { id: "s6", label: "Nhanh",    beats: 6, note: "6 nhịp mỗi lượt" },
+  { id: "s4", label: "Cực nhanh", beats: 4, note: "4 nhịp — kiểu AU thật" },
+];
+// Điểm chốt luôn cách mép phải đúng 0.5 nhịp, không phụ thuộc tốc độ.
+// Nhờ vậy phần đuôi "bấm không ăn nữa" chỉ còn 0.12 nhịp ở mọi mức,
+// thay vì 0.58 nhịp như khi cố định điểm chốt theo phần trăm.
+const TAIL_BEATS  = 0.5;
+const targetFrac  = () => (G.beats - TAIL_BEATS) / G.beats;
 
-const WIN = { perfect: 0.10, great: 0.18, cool: 0.28, bad: 0.45 }; // đơn vị: nhịp
+const WIN = { perfect: 0.10, great: 0.18, cool: 0.28, bad: 0.38 }; // đơn vị: nhịp
 const GRADES = ["perfect", "great", "cool", "bad", "miss"];
 const SCORE = { perfect: 1000, great: 700, cool: 400, bad: 100, miss: 0 };
 const HP_DELTA = { perfect: 3, great: 2, cool: 1, bad: -6, miss: -13 };
@@ -589,7 +628,7 @@ const el = {
   npname: $("npname"), npbpm: $("npbpm"),
   scoreVal: $("scoreVal"), comboVal: $("comboVal"), maxComboVal: $("maxComboVal"),
   hp: $("hp"), arrowbox: $("arrowbox"), judge: $("judge"), marker: $("marker"),
-  wood: $("woodpanel"), fill: $("fill"), levelNum: $("levelNum"),
+  wood: $("woodpanel"), fill: $("fill"), levelNum: $("levelNum"), barwrap: $("barwrap"),
   countdown: $("countdown"), comboBig: $("comboBig"), best: $("best"),
   menu: $("menu"), over: $("over"), pause: $("pause"),
   viz: $("viz"),
@@ -770,6 +809,7 @@ function stopMusic() {
 
 const G = {
   track: TRACKS[0],
+  beats: 8,                     // số nhịp mỗi lượt, chọn ở menu
   playing: false, paused: false,
   bpm: 92,
   musicStart: 0,
@@ -787,17 +827,18 @@ let startToken = 0;
    ============================================================ */
 
 function layoutZones() {
+  const tf = targetFrac();
   const band = (id, beats) => {
-    const f = beats / SWEEP_BEATS;
+    const f = beats / G.beats;
     const n = $(id);
-    n.style.left = ((TARGET_FRAC - f) * 100) + "%";
+    n.style.left = ((tf - f) * 100) + "%";
     n.style.width = (f * 2 * 100) + "%";
   };
   band("z-bad", WIN.bad);
   band("z-cool", WIN.cool);
   band("z-great", WIN.great);
   band("z-perfect", WIN.perfect);
-  $("target").style.left = (TARGET_FRAC * 100) + "%";
+  $("target").style.left = (tf * 100) + "%";
 }
 
 /* ============================================================
@@ -806,7 +847,9 @@ function layoutZones() {
 
 function noteCount() {
   const T = G.track;
-  return Math.min(T.maxNotes, T.minNotes + Math.floor(G.round / T.grow));
+  // lượt ngắn thì không thể nhồi nhiều nốt: chặn theo số nhịp có được
+  const cap = Math.min(T.maxNotes, Math.round(G.beats * 1.5));
+  return Math.min(cap, T.minNotes + Math.floor(G.round / T.grow));
 }
 
 function randSeq(n) {
@@ -849,11 +892,12 @@ function renderArrows() {
 
 function startRound() {
   G.round++;
-  G.roundStart = G.musicStart + (4 + G.round * BEATS_PER_ROUND) * beatDur();
-  G.hitTime = G.roundStart + (BEATS_PER_ROUND - 1) * beatDur();
+  G.roundStart = G.musicStart + (4 + G.round * G.beats) * beatDur();
+  G.hitTime = G.roundStart + (G.beats - TAIL_BEATS) * beatDur();
   G.seq = randSeq(noteCount());
   G.idx = 0;
   G.judged = false;
+  el.barwrap.classList.remove("judged");
   el.levelNum.textContent = G.seq.length; // như AU: level = số mũi tên của lượt
   renderArrows();
 }
@@ -895,6 +939,7 @@ function pressSpace() {
 
 function judge(grade, label) {
   G.judged = true;
+  el.barwrap.classList.add("judged");
   G.tally[grade]++;
 
   if (grade === "miss" || grade === "bad") G.combo = 0;
@@ -967,21 +1012,18 @@ function frame() {
   }
 
   // vạch chạy — tốc độ tỉ lệ nghịch với BPM
-  const sweepStart = G.hitTime - SWEEP_BEATS * TARGET_FRAC * bd;
-  const p = (t - sweepStart) / (SWEEP_BEATS * bd);
-  if (p >= 0 && p <= 1.02) {
-    const pct = Math.min(100, p * 100);
+  // con lăn chạy suốt lượt: 0% ở đầu lượt, 100% đúng lúc lượt sau bắt đầu
+  const p = (t - G.roundStart) / (G.beats * bd);
+  if (p >= 0 && p <= 1) {
+    const pct = p * 100;
     el.marker.style.opacity = "1";
     el.marker.style.left = pct + "%";
     el.fill.style.width = pct + "%";
-  } else {
-    el.marker.style.opacity = "0";
-    if (p < 0) el.fill.style.width = "0%";
   }
 
   if (!G.judged && t > G.hitTime + WIN.bad * bd) judge("miss");
 
-  if (t >= G.roundStart + BEATS_PER_ROUND * bd && G.hp > 0) startRound();
+  if (t >= G.roundStart + G.beats * bd && G.hp > 0) startRound();
 }
 
 /* ============================================================
@@ -1031,6 +1073,26 @@ function buildTrackList() {
     b.append(name, dots, bpm);
     b.addEventListener("click", () => selectTrack(T));
     list.appendChild(b);
+  });
+}
+
+function buildSpeeds() {
+  const box = $("speeds");
+  box.textContent = "";
+  SPEEDS.forEach((S) => {
+    const b = document.createElement("button");
+    b.className = S.beats === G.beats ? "on" : "";
+    b.textContent = S.label;
+    const s = document.createElement("small");
+    s.textContent = S.note;
+    b.appendChild(s);
+    b.addEventListener("click", () => {
+      G.beats = S.beats;
+      localStorage.setItem("au_beats", S.beats);
+      buildSpeeds();
+      layoutZones();
+    });
+    box.appendChild(b);
   });
 }
 
@@ -1218,6 +1280,9 @@ $("quitbtn").addEventListener("click", gameOver);
 
 if (window.matchMedia("(pointer: coarse)").matches) document.body.classList.add("touch");
 
+G.beats = SPEEDS.some((s) => s.beats === +localStorage.getItem("au_beats"))
+  ? +localStorage.getItem("au_beats") : 8;
+buildSpeeds();
 buildTrackList();
 selectTrack(MP3_TRACKS.find((t) => t.id === "m-haru") || TRACKS[0]);
 refreshBest();
