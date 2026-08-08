@@ -37,3 +37,8 @@ Thumbs.db
 
 # Test images stay in repo (helpful as samples) - comment to exclude
 # test/
+
+# Nhạc cho game Audition: 33MB file thương mại, không đưa lên GitHub.
+# Deploy thẳng lên server, không đi qua repo.
+web/public/music/*.mp3
+web/public/music/*.m4a

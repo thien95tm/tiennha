@@ -121,53 +121,119 @@
     text-shadow: 0 0 40px rgba(255,61,154,.85);
   }
 
-  /* ---------- mũi tên ---------- */
-  #arrowbox {
-    min-height: 74px;
-    display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap;
-    background: var(--panel); border: 1px solid var(--line);
-    border-radius: 16px; padding: 11px 9px;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  #arrowbox.shake { animation: shake .3s; border-color: var(--red) }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-9px)} 40%{transform:translateX(9px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
-  #arrowbox.done { border-color: var(--green); box-shadow: 0 0 22px rgba(62,242,160,.22) }
+  /* ---------- khu chơi: badge LEVEL + thanh nhịp + bảng gỗ ---------- */
+  #playfield { display: flex; flex-direction: column; gap: 7px }
 
-  .arw {
-    width: 40px; height: 44px; flex: 0 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 25px; font-weight: 900; border-radius: 10px;
-    background: #221839; border: 2px solid #382a60; color: #7a6fa8;
-    transition: .12s;
-  }
-  .arw.hit {
-    background: linear-gradient(180deg, var(--pink), #a72bff);
-    border-color: #ffa3d3; color: #fff;
-    transform: translateY(-4px) scale(1.06);
-    box-shadow: 0 0 16px rgba(255,61,154,.6);
-  }
-  .arw.next { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 14px rgba(33,230,255,.35) }
+  #barrow { display: flex; align-items: center; gap: 10px; padding: 0 4px }
 
-  /* ---------- thanh nhịp ---------- */
+  #levelbadge {
+    display: flex; align-items: center; gap: 5px; flex: 0 0 auto;
+    font-weight: 900; font-size: 12px; letter-spacing: 1.5px; color: #fff;
+    text-shadow: 0 2px 0 rgba(0,0,0,.6), 0 0 10px rgba(0,0,0,.5);
+  }
+  #levelbadge .clover {
+    width: 17px; height: 17px; border-radius: 50%; display: grid; place-items: center;
+    background: radial-gradient(circle at 40% 30%, #a8ff8f, #3fbf3f 60%, #1c7a25);
+    box-shadow: 0 2px 4px rgba(0,0,0,.5), inset 0 -3px 5px rgba(0,0,0,.3);
+    font-size: 10px; color: #0d3d12;
+  }
+  #levelbadge .num {
+    font-size: 18px; line-height: 1; color: #ffe066;
+    text-shadow: 0 2px 0 #7a4a00, 0 0 12px rgba(255,210,63,.7);
+  }
+
+  /* thanh nhịp kiểu Audition: capsule kem, ruột cam-đỏ, núm tròn */
   #barwrap {
-    position: relative; height: 42px;
-    background: #120b26; border: 1px solid var(--line);
-    border-radius: 12px; overflow: hidden;
+    position: relative; flex: 1; height: 24px;
+    background: linear-gradient(180deg, #f6e8c4 0%, #e6cf9c 55%, #cbae74 100%);
+    border: 3px solid #46260e;
+    border-radius: 999px;
+    box-shadow: inset 0 3px 7px rgba(90,55,20,.45), 0 4px 12px rgba(0,0,0,.5);
+  }
+  #bartrack { position: absolute; inset: 0; border-radius: 999px; overflow: hidden }
+  #fill {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+    background: linear-gradient(180deg, #ffd75e 0%, #ff9a22 45%, #e93a0c 100%);
+    box-shadow: inset 0 -4px 8px rgba(120,20,0,.45);
   }
   .zone { position: absolute; top: 0; bottom: 0 }
-  #z-bad     { background: rgba(255,149,0,.14) }
-  #z-cool    { background: rgba(33,230,255,.20) }
-  #z-great   { background: rgba(255,61,154,.30) }
-  #z-perfect { background: rgba(255,210,63,.60); box-shadow: 0 0 22px rgba(255,210,63,.55) inset }
-  #target { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; opacity: .9 }
-  #marker {
-    position: absolute; top: -4px; bottom: -4px; width: 5px; left: 0; opacity: 0;
-    background: #fff; border-radius: 3px; box-shadow: 0 0 14px rgba(255,255,255,.95);
+  #z-bad     { background: rgba(70,38,14,.10) }
+  #z-cool    { background: rgba(70,38,14,.13) }
+  #z-great   { background: rgba(255,255,255,.30) }
+  #z-perfect {
+    background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,236,150,.75));
+    box-shadow: 0 0 12px rgba(255,240,170,.9);
   }
+  #target { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(70,38,14,.55) }
+  #marker {
+    position: absolute; top: 50%; left: 0; width: 22px; height: 22px;
+    margin: -11px 0 0 -11px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(circle at 42% 30%, #fff 0%, #ff9c9c 28%, #e2201b 62%, #8d0b0b 100%);
+    border: 3px solid #fff;
+    box-shadow: 0 2px 7px rgba(0,0,0,.65), 0 0 14px rgba(255,80,60,.55);
+  }
+
+  /* bảng gỗ cong chứa mũi tên */
+  #woodpanel {
+    position: relative;
+    padding: 13px 20px;
+    border: 3px solid #3d1f0a;
+    border-radius: 999px / 62px;
+    background:
+      repeating-linear-gradient(93deg, rgba(60,28,8,.16) 0 2px, transparent 2px 11px),
+      linear-gradient(180deg, #b5762f 0%, #96581f 38%, #6b3a13 72%, #4a2609 100%);
+    box-shadow: 0 9px 24px rgba(0,0,0,.6), inset 0 2px 0 rgba(255,215,150,.4), inset 0 -10px 20px rgba(0,0,0,.45);
+  }
+  #woodpanel::before {
+    content: ""; position: absolute; inset: 8px;
+    border-radius: 999px / 48px;
+    background: linear-gradient(180deg, rgba(40,18,4,.42), rgba(255,205,130,.05) 55%, rgba(40,18,4,.30));
+    box-shadow: inset 0 3px 9px rgba(0,0,0,.55), inset 0 -2px 0 rgba(255,205,140,.18);
+  }
+
+  #arrowbox {
+    position: relative; z-index: 1; min-height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    gap: var(--agap, 9px); flex-wrap: nowrap;
+  }
+  #woodpanel.shake { animation: shake .3s; border-color: var(--red) }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-9px)} 40%{transform:translateX(9px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
+  #woodpanel.done { border-color: #ffe066; box-shadow: 0 9px 24px rgba(0,0,0,.6), 0 0 26px rgba(255,224,102,.45), inset 0 2px 0 rgba(255,215,150,.4), inset 0 -10px 20px rgba(0,0,0,.45) }
+
+  /* nốt mũi tên tròn bóng */
+  .arw {
+    width: var(--asize, 44px); height: var(--asize, 44px); flex: 0 0 auto; position: relative;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, #9fd8ff 0%, #45a2ec 40%, #1668c4 72%, #0a3e80 100%);
+    border: 3px solid #f4f9ff;
+    box-shadow: 0 3px 0 rgba(0,0,0,.4), 0 6px 11px rgba(0,0,0,.5), inset 0 -6px 11px rgba(0,20,60,.4);
+    display: grid; place-items: center;
+    transition: transform .12s, filter .12s;
+  }
+  .arw::after {
+    content: ""; position: absolute; left: 17%; right: 17%; top: 7%; height: 33%;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,0));
+    pointer-events: none;
+  }
+  .arw svg { width: 60%; height: 60%; position: relative; z-index: 1; transform: rotate(var(--rot, 0deg)) }
+  .arw svg path { fill: #fff; stroke: rgba(6,40,85,.55); stroke-width: 1.2; stroke-linejoin: round }
+
+  .arw.hit {
+    background: radial-gradient(circle at 50% 30%, #fff3c0 0%, #ffca4d 40%, #f59a10 72%, #a85c00 100%);
+    box-shadow: 0 3px 0 rgba(0,0,0,.4), 0 6px 11px rgba(0,0,0,.5), 0 0 16px rgba(255,200,60,.7), inset 0 -6px 11px rgba(90,45,0,.4);
+    transform: translateY(-3px) scale(1.05);
+  }
+  .arw.hit svg path { stroke: rgba(110,60,0,.5) }
+  .arw.next { animation: nextpulse .75s ease-in-out infinite }
+  @keyframes nextpulse {
+    0%, 100% { box-shadow: 0 3px 0 rgba(0,0,0,.4), 0 6px 11px rgba(0,0,0,.5), 0 0 0 0 rgba(255,255,255,.85), inset 0 -6px 11px rgba(0,20,60,.4) }
+    60%      { box-shadow: 0 3px 0 rgba(0,0,0,.4), 0 6px 11px rgba(0,0,0,.5), 0 0 0 8px rgba(255,255,255,0),   inset 0 -6px 11px rgba(0,20,60,.4) }
+  }
+
   #barlabel {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 10px; letter-spacing: 1.5px; color: rgba(255,255,255,.40);
-    text-transform: uppercase; pointer-events: none;
+    text-align: center; font-size: 10px; letter-spacing: 1.5px;
+    color: var(--muted); text-transform: uppercase;
   }
 
   /* ---------- nút cảm ứng ---------- */
@@ -203,18 +269,25 @@
   }
   .sub { color: var(--muted); font-size: 13px; line-height: 1.6; max-width: 360px }
 
-  /* danh sách nhạc */
-  #tracklist { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 7px }
+  /* danh sách nhạc — cuộn riêng để logo và nút BẮT ĐẦU luôn nhìn thấy */
+  #menu { justify-content: flex-start; overflow: hidden; gap: 11px }
+  #tracklist {
+    width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 6px;
+    flex: 1 1 auto; min-height: 90px; overflow-y: auto; padding-right: 4px;
+  }
+  #tracklist::-webkit-scrollbar { width: 5px }
+  #tracklist::-webkit-scrollbar-thumb { background: var(--line); border-radius: 99px }
   .track {
     display: flex; align-items: center; gap: 10px; text-align: left;
     background: var(--panel); border: 1px solid var(--line); color: var(--text);
-    border-radius: 12px; padding: 10px 13px; cursor: pointer; transition: .15s;
-    font-family: inherit; font-size: 14px;
+    border-radius: 12px; padding: 8px 12px; cursor: pointer; transition: .15s;
+    font-family: inherit; font-size: 13.5px; flex: 0 0 auto;
   }
   .track:hover { border-color: #4a3780 }
   .track.on { border-color: var(--pink); background: rgba(255,61,154,.13); box-shadow: 0 0 18px rgba(255,61,154,.2) }
   .track .tname { flex: 1; font-weight: 700 }
   .track .tname small { display: block; font-weight: 400; font-size: 11px; color: var(--muted); margin-top: 2px }
+  .track .tname small.warn { color: var(--orange) }
   .track .tbpm {
     font-size: 12px; font-weight: 800; color: var(--gold); font-variant-numeric: tabular-nums;
     background: #241a3f; border-radius: 7px; padding: 4px 8px; white-space: nowrap;
@@ -301,16 +374,26 @@
     <div id="countdown"></div>
   </div>
 
-  <div id="arrowbox"></div>
+  <div id="playfield">
+    <div id="barrow">
+      <div id="levelbadge">
+        <span class="clover">✿</span>LEVEL <span class="num" id="levelNum">0</span>
+      </div>
+      <div id="barwrap">
+        <div id="bartrack">
+          <div id="fill"></div>
+          <div class="zone" id="z-bad"></div>
+          <div class="zone" id="z-cool"></div>
+          <div class="zone" id="z-great"></div>
+          <div class="zone" id="z-perfect"></div>
+          <div id="target"></div>
+        </div>
+        <div id="marker"></div>
+      </div>
+    </div>
 
-  <div id="barwrap">
-    <div class="zone" id="z-bad"></div>
-    <div class="zone" id="z-cool"></div>
-    <div class="zone" id="z-great"></div>
-    <div class="zone" id="z-perfect"></div>
-    <div id="target"></div>
-    <div id="marker"></div>
-    <div id="barlabel">Nhấn SPACE khi vạch vào vùng vàng</div>
+    <div id="woodpanel"><div id="arrowbox"></div></div>
+    <div id="barlabel">Gõ hết mũi tên rồi nhấn SPACE khi núm đỏ vào vạch trắng</div>
   </div>
 
   <div id="pad">
@@ -426,15 +509,48 @@ const TRACKS = [
 ];
 
 /* ---- Nhạc mp3 thật ----------------------------------------
-   Muốn dùng bài hát thật: bỏ file vào  web/public/music/
-   rồi khai báo ở đây. `offset` = số giây từ đầu file tới phách 1.
-   `url` cũng có thể là link ngoài, nhưng server đó PHẢI trả header
-   CORS (Access-Control-Allow-Origin) vì nhạc đi qua Web Audio.
-   Ví dụ:
-     { id:"m1", name:"Tên bài", genre:"Pixabay Music", url:"music/bai.mp3",
-       bpm:128, offset:0.32, minNotes:4, maxNotes:8, grow:3 },
+   `bpm` và `offset` đo trực tiếp từ file: onset envelope dải trầm ->
+   autocorrelation -> khớp lược phách trên toàn bài. Cách đo này bám đúng
+   bản remix/lofi/acoustic đang dùng, không phải BPM bản gốc trên mạng,
+   và cho luôn offset (giây từ đầu file tới phách đầu) mà web không có.
+
+   `shaky: true` = nhịp không thật đều (ballad rubato hoặc đánh tay),
+   chơi tới đoạn sau có thể lệch dần.
+
+   Muốn thêm bài: bỏ mp3 vào web/public/music/ rồi khai báo ở đây;
+   `url` cũng nhận link ngoài nhưng server đó phải trả header CORS.
    ------------------------------------------------------------ */
-const MP3_TRACKS = [];
+const MP3_TRACKS = [
+  { id: "m-anhtin", name: "Anh Tin Mình Đã Cho Nhau Một Kỷ Niệm", genre: "Ballad Việt",
+    url: "music/anh-tin-minh.mp3", bpm: 86.01, offset: 0.375, minNotes: 3, maxNotes: 6, grow: 4 },
+
+  { id: "m-nocturne", name: "Nocturne", genre: "Ballad · nhẹ nhàng",
+    url: "music/nocturne.mp3", bpm: 86.99, offset: 0.387, minNotes: 3, maxNotes: 6, grow: 4 },
+
+  { id: "m-muadong", name: "Mùa Đông Không Lạnh (Remake)", genre: "Pop Việt",
+    url: "music/mua-dong-khong-lanh.mp3", bpm: 100.02, offset: 0.042, minNotes: 4, maxNotes: 7, grow: 4 },
+
+  { id: "m-aloha", name: "Aloha", genre: "Cool · nhạc nền AU kinh điển",
+    url: "music/aloha-cool.mp3", bpm: 101.0, offset: 0.339, minNotes: 4, maxNotes: 7, grow: 4 },
+
+  { id: "m-tuyet", name: "Tuyết Yêu Thương (Lofi)", genre: "Lofi remix",
+    url: "music/tuyet-yeu-thuong-lofi.mp3", bpm: 116.0, offset: 0.030, minNotes: 4, maxNotes: 8, grow: 3 },
+
+  { id: "m-haru", name: "Haru Haru", genre: "K-pop · huyền thoại Audition",
+    url: "music/haru-haru.mp3", bpm: 125.97, offset: 0.308, minNotes: 4, maxNotes: 8, grow: 3 },
+
+  { id: "m-doncoi", name: "Đơn Côi", genre: "Dance Việt · sôi động",
+    url: "music/don-coi.mp3", bpm: 133.99, offset: 0.178, minNotes: 5, maxNotes: 9, grow: 3 },
+
+  { id: "m-think", name: "Think Of You", genre: "Nhịp shuffle · hơi khó bắt",
+    url: "music/think-of-you.mp3", bpm: 140.03, offset: 0.399, minNotes: 5, maxNotes: 9, grow: 3, shaky: true },
+
+  { id: "m-stupid", name: "Because I'm Stupid", genre: "K-ballad · intro tự do",
+    url: "music/because-im-stupid.mp3", bpm: 150.67, offset: 0.289, minNotes: 5, maxNotes: 9, grow: 3, shaky: true },
+
+  { id: "m-tieuthuyet", name: "Tiểu Thuyết Tình Yêu (Acoustic)", genre: "Acoustic · đánh tay, trôi nhịp",
+    url: "music/tieu-thuyet-tinh-yeu.mp3", bpm: 160.03, offset: 0.005, minNotes: 5, maxNotes: 10, grow: 3, shaky: true },
+];
 
 const CUSTOM = {
   id: "custom", name: "Nhạc của bạn", genre: "Chọn file trong máy + nhập BPM",
@@ -459,8 +575,10 @@ const HP_DELTA = { perfect: 3, great: 2, cool: 1, bad: -6, miss: -13 };
 const ACC_W = { perfect: 100, great: 80, cool: 55, bad: 20, miss: 0 };
 
 const KEYS = ["left", "up", "right", "down"];
-const GLYPH = { left: "←", up: "↑", right: "→", down: "↓" };
 const KEYMAP = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down" };
+// mũi tên khối, vẽ hướng phải rồi xoay bằng CSS
+const ARROW_PATH = "M2 9h9.5V4.2L22 12l-10.5 7.8V15H2z";
+const ROT = { right: 0, up: -90, down: 90, left: 180 };
 
 /* ============================================================
    3. DOM
@@ -471,6 +589,7 @@ const el = {
   npname: $("npname"), npbpm: $("npbpm"),
   scoreVal: $("scoreVal"), comboVal: $("comboVal"), maxComboVal: $("maxComboVal"),
   hp: $("hp"), arrowbox: $("arrowbox"), judge: $("judge"), marker: $("marker"),
+  wood: $("woodpanel"), fill: $("fill"), levelNum: $("levelNum"),
   countdown: $("countdown"), comboBig: $("comboBig"), best: $("best"),
   menu: $("menu"), over: $("over"), pause: $("pause"),
   viz: $("viz"),
@@ -622,14 +741,10 @@ function scheduleStep(i, t) {
   if (r >= 0) leadNote(t, T.bass[bar] + r, 0.16);
 }
 
-// Trả về thời điểm (theo đồng hồ AudioContext) của nhịp số 0.
-function startMusic(t0, offset) {
+// Nhạc tự sinh. Trả về thời điểm (đồng hồ AudioContext) của nhịp số 0.
+// Nhạc mp3 do startGame lo, vì còn phải đợi tải xong.
+function startMusic(t0) {
   stopMusic();
-  if (G.track.url) {
-    audioEl.currentTime = 0;
-    audioEl.play().catch(() => {});
-    return ac.currentTime + offset; // file phát ngay, nhịp 0 lệch đúng bằng offset
-  }
   nextStepTime = t0;
   step16 = 0;
   schedTimer = setInterval(() => {
@@ -665,6 +780,7 @@ const G = {
 };
 
 const beatDur = () => 60 / G.bpm;
+let startToken = 0;
 
 /* ============================================================
    6. THANH NHỊP
@@ -704,15 +820,31 @@ function randSeq(n) {
 }
 
 function renderArrows() {
-  el.arrowbox.className = "";
+  el.wood.classList.remove("done");
   el.arrowbox.textContent = "";
+
+  // lượt nhiều nốt thì thu nhỏ để luôn nằm gọn trên 1 hàng của thanh gỗ
+  const n = G.seq.length;
+  const avail = el.arrowbox.clientWidth || 460;
+  const gap = n > 8 ? 6 : n > 6 ? 7 : 9;
+  const size = Math.max(26, Math.min(44, Math.floor((avail - gap * (n - 1)) / Math.max(n, 1))));
+  el.arrowbox.style.setProperty("--asize", size + "px");
+  el.arrowbox.style.setProperty("--agap", gap + "px");
   G.seq.forEach((k, i) => {
     const d = document.createElement("div");
     d.className = "arw" + (i < G.idx ? " hit" : i === G.idx ? " next" : "");
-    d.textContent = GLYPH[k];
+    d.style.setProperty("--rot", ROT[k] + "deg");
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", ARROW_PATH);
+    svg.appendChild(p);
+    d.appendChild(svg);
+
     el.arrowbox.appendChild(d);
   });
-  if (G.idx >= G.seq.length) el.arrowbox.classList.add("done");
+  if (G.seq.length && G.idx >= G.seq.length) el.wood.classList.add("done");
 }
 
 function startRound() {
@@ -722,6 +854,7 @@ function startRound() {
   G.seq = randSeq(noteCount());
   G.idx = 0;
   G.judged = false;
+  el.levelNum.textContent = G.seq.length; // như AU: level = số mũi tên của lượt
   renderArrows();
 }
 
@@ -739,8 +872,8 @@ function pressArrow(k) {
     G.idx = 0;
     buzz(t);
     renderArrows();
-    el.arrowbox.classList.add("shake");
-    setTimeout(() => el.arrowbox.classList.remove("shake"), 320);
+    el.wood.classList.add("shake");
+    setTimeout(() => el.wood.classList.remove("shake"), 320);
   }
 }
 
@@ -837,10 +970,13 @@ function frame() {
   const sweepStart = G.hitTime - SWEEP_BEATS * TARGET_FRAC * bd;
   const p = (t - sweepStart) / (SWEEP_BEATS * bd);
   if (p >= 0 && p <= 1.02) {
+    const pct = Math.min(100, p * 100);
     el.marker.style.opacity = "1";
-    el.marker.style.left = Math.min(100, p * 100) + "%";
+    el.marker.style.left = pct + "%";
+    el.fill.style.width = pct + "%";
   } else {
     el.marker.style.opacity = "0";
+    if (p < 0) el.fill.style.width = "0%";
   }
 
   if (!G.judged && t > G.hitTime + WIN.bad * bd) judge("miss");
@@ -860,7 +996,7 @@ function show(screen) {
 function buildTrackList() {
   const list = $("tracklist");
   list.textContent = "";
-  [...TRACKS, ...MP3_TRACKS, CUSTOM].forEach((T) => {
+  [...MP3_TRACKS, ...TRACKS, CUSTOM].forEach((T) => {
     const b = document.createElement("button");
     b.className = "track" + (T.id === G.track.id ? " on" : "");
     b.dataset.id = T.id;
@@ -881,9 +1017,16 @@ function buildTrackList() {
       dots.appendChild(d);
     }
 
+    if (T.shaky) {
+      const w = document.createElement("small");
+      w.className = "warn";
+      w.textContent = "⚠ nhịp không đều, có thể lệch dần";
+      name.appendChild(w);
+    }
+
     const bpm = document.createElement("div");
     bpm.className = "tbpm";
-    bpm.textContent = T.custom ? "BPM tự nhập" : T.bpm + " BPM";
+    bpm.textContent = T.custom ? "BPM tự nhập" : Math.round(T.bpm) + " BPM";
 
     b.append(name, dots, bpm);
     b.addEventListener("click", () => selectTrack(T));
@@ -912,14 +1055,9 @@ function startGame() {
     T.bpm = Math.max(40, Math.min(300, +$("customBpm").value || 120));
     T.offset = +$("customOffset").value || 0;
   }
-  if (T.url) {
-    // link ngoài cần server trả CORS thì analyser mới đọc được
-    if (/^https?:/i.test(T.url)) audioEl.crossOrigin = "anonymous";
-    if (audioEl.src !== T.url) audioEl.src = T.url;
-    if (!mediaSrc) { mediaSrc = ac.createMediaElementSource(audioEl); mediaSrc.connect(master); }
-  }
 
-  G.playing = true; G.paused = false;
+  stopMusic();
+  G.playing = false; G.paused = false;
   G.bpm = T.bpm;
   G.round = -1;
   G.score = 0; G.combo = 0; G.maxCombo = 0; G.hp = 100;
@@ -927,7 +1065,7 @@ function startGame() {
   G.judged = true;
 
   el.npname.textContent = T.custom ? (T.label || "Nhạc của bạn") : T.name;
-  el.npbpm.textContent = G.bpm + " BPM";
+  el.npbpm.textContent = Math.round(G.bpm) + " BPM";
   el.scoreVal.textContent = "0";
   el.comboVal.textContent = "0";
   el.comboVal.classList.remove("hot");
@@ -937,11 +1075,47 @@ function startGame() {
   el.hp.style.width = "100%";
   el.hp.classList.remove("low");
   el.arrowbox.textContent = "";
+  el.levelNum.textContent = "0";
+  el.fill.style.width = "0%";
+  el.marker.style.opacity = "0";
+  el.wood.classList.remove("done");
 
   layoutZones();
   show(null);
 
-  G.musicStart = startMusic(ac.currentTime + 0.3, T.offset || 0);
+  if (!T.url) {                       // nhạc tự sinh: chạy được ngay
+    G.musicStart = startMusic(ac.currentTime + 0.3);
+    G.playing = true;
+    return;
+  }
+
+  // mp3: phải đợi tải đủ rồi mới chạy đồng hồ nhịp, nếu không lưới phách
+  // sẽ chạy trước tiếng nhạc đúng bằng thời gian buffer.
+  if (/^https?:/i.test(T.url)) audioEl.crossOrigin = "anonymous";
+  if (!mediaSrc) { mediaSrc = ac.createMediaElementSource(audioEl); mediaSrc.connect(master); }
+  if (!audioEl.src.endsWith(T.url)) audioEl.src = T.url;
+
+  el.countdown.style.display = "flex";
+  el.countdown.style.fontSize = "22px";
+  el.countdown.textContent = "ĐANG TẢI NHẠC…";
+
+  const token = ++startToken;         // đổi bài giữa chừng thì bỏ lượt tải cũ
+  const go = () => {
+    if (token !== startToken) return;
+    audioEl.currentTime = 0;
+    audioEl.play().then(() => {
+      if (token !== startToken) return;
+      el.countdown.style.fontSize = "";
+      // mốc phách 0 = lúc nhạc thật sự bắt đầu kêu + offset đã đo
+      G.musicStart = ac.currentTime + (T.offset || 0);
+      G.playing = true;
+    }).catch(() => {
+      el.countdown.textContent = "KHÔNG PHÁT ĐƯỢC NHẠC";
+    });
+  };
+
+  if (audioEl.readyState >= 3) go();
+  else audioEl.addEventListener("canplaythrough", go, { once: true });
 }
 
 function gameOver() {
@@ -991,7 +1165,12 @@ function togglePause() {
   } else {
     show(null);
     if (ac.state === "suspended") ac.resume();
-    if (G.track.url) audioEl.play().catch(() => {});
+    if (G.track.url) {
+      audioEl.play().catch(() => {});
+      // Đồng bộ lại lưới phách theo vị trí thật trong bài, vừa bù độ trễ
+      // khi phát lại vừa xoá luôn sai lệch tích luỹ từ trước.
+      G.musicStart = ac.currentTime - (audioEl.currentTime - (G.track.offset || 0));
+    }
   }
 }
 
@@ -1040,7 +1219,7 @@ $("quitbtn").addEventListener("click", gameOver);
 if (window.matchMedia("(pointer: coarse)").matches) document.body.classList.add("touch");
 
 buildTrackList();
-selectTrack(TRACKS[0]);
+selectTrack(MP3_TRACKS.find((t) => t.id === "m-haru") || TRACKS[0]);
 refreshBest();
 layoutZones();
 requestAnimationFrame(frame);
